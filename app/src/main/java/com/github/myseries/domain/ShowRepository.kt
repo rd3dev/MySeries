@@ -19,6 +19,10 @@ class ShowRepository(private val service: TVMazeService) {
         ).flow
     }
 
+    suspend fun getShowsByNameStream(name: String): List<Show> {
+        return service.getShowsByName(name)
+    }
+
     companion object {
         private const val PAGE_SIZE = 50
     }

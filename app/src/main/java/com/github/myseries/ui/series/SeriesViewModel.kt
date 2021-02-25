@@ -7,20 +7,18 @@ import androidx.paging.cachedIn
 import com.github.myseries.data.model.Show
 import com.github.myseries.domain.ShowRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 
 class SeriesViewModel(private val repository: ShowRepository) : ViewModel() {
 
-    private var currentQueryValue: String? = null
-
-    private var currentSearchResult: Flow<PagingData<Show>>? = null
-
     fun getSeries(): Flow<PagingData<Show>> {
-        val lastResult = currentSearchResult
-
-        val newResult: Flow<PagingData<Show>> = repository.getShowsStream()
+        return repository.getShowsStream()
             .cachedIn(viewModelScope)
-        currentSearchResult = newResult
-        return newResult
     }
 
+    fun searchSeriesByName(it: String) {
+        viewModelScope.launch {
+             repository.getShowsByNameStream(it)
+        }
+    }
 }
