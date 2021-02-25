@@ -20,7 +20,9 @@ class ShowRepository(private val service: TVMazeService) {
     }
 
     suspend fun getShowsByNameStream(name: String): List<Show> {
-        return service.getShowsByName(name)
+        return service.getShowsByName(name).map {
+            it.show
+        }
     }
 
     companion object {

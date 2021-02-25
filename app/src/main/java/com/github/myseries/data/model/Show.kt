@@ -4,7 +4,7 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class Show (
-	val id : Int,
+	val id : Int?,
 	val url : String?,
 	val name : String?,
 	val type : String?,

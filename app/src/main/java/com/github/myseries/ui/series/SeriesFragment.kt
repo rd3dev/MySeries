@@ -1,16 +1,16 @@
 package com.github.myseries.ui.series
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import com.github.myseries.MySeriesApplication
+import com.github.myseries.R
 import com.github.myseries.databinding.FragmentSeriesBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -60,6 +60,8 @@ class SeriesFragment : Fragment() {
                     Toast.LENGTH_LONG
                 ).show()
             }
+
+            setHasOptionsMenu(true)
         }
 
         binding.listShows.adapter =  adapter.withLoadStateHeaderAndFooter(
@@ -76,6 +78,21 @@ class SeriesFragment : Fragment() {
             }
         }
     }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.options_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.search -> {
+                findNavController().navigate(R.id.to_search)
+            }
+        }
+        return true
+    }
+
 
     override fun onDestroy() {
         super.onDestroy()
