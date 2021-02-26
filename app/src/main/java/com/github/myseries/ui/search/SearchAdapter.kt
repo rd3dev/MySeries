@@ -1,21 +1,21 @@
-package com.github.myseries.ui.series.search
+package com.github.myseries.ui.search
 
 import android.util.Log
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.github.myseries.data.model.Show
-import com.github.myseries.ui.series.SeriesViewHolder
+import com.github.myseries.domain.model.Series
+import com.github.myseries.ui.common.SeriesViewHolder
 
 class SearchAdapter :
     RecyclerView.Adapter<SeriesViewHolder>() {
 
-    private var shows = listOf<Show>()
+    private var shows = listOf<Series>()
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): SeriesViewHolder {
         return SeriesViewHolder.create(viewGroup)
     }
 
-    fun setShows(list: List<Show>) {
+    fun setShows(list: List<Series>) {
         shows = list
         notifyDataSetChanged()
     }

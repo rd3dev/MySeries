@@ -1,11 +1,11 @@
-package com.github.myseries.ui.series
+package com.github.myseries.ui.common
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.github.myseries.data.model.Show
 import com.github.myseries.databinding.ItemSeriesBinding
+import com.github.myseries.domain.model.Series
 
 class SeriesViewHolder(private val binding: ItemSeriesBinding)  : RecyclerView.ViewHolder(binding.root){
 
@@ -20,12 +20,12 @@ class SeriesViewHolder(private val binding: ItemSeriesBinding)  : RecyclerView.V
         }
     }
 
-    fun bind(show: Show) {
-        binding.name.text =show.name ?: "-"
+    fun bind(series: Series) {
+        binding.name.text =series.name ?: "-"
 
         Glide
             .with(binding.root)
-            .load(show.image?.medium)
+            .load(series.poster)
             .centerCrop()
             .into(binding.poster);
     }

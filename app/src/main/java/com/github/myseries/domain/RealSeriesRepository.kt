@@ -4,12 +4,13 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.github.myseries.data.ShowPagingSource
-import com.github.myseries.data.model.Show
+import com.github.myseries.data.model.toSeries
 import com.github.myseries.data.remote.TVMazeService
+import com.github.myseries.domain.model.Series
 import kotlinx.coroutines.flow.Flow
 
-class ShowRepository(private val service: TVMazeService) {
-    fun getShowsStream(): Flow<PagingData<Show>> {
+class RealSeriesRepository(private val service: TVMazeService) : SeriesRepository {
+    override fun getSeriesStream(): Flow<PagingData<Series>> {
         return Pager(
             config = PagingConfig(
                 pageSize = PAGE_SIZE,
@@ -19,9 +20,9 @@ class ShowRepository(private val service: TVMazeService) {
         ).flow
     }
 
-    suspend fun getShowsByNameStream(name: String): List<Show> {
+    override suspend fun getSeriesByName(name: String): List<Series> {
         return service.getShowsByName(name).map {
-            it.show
+            it.show.toSeries()
         }
     }
 

@@ -3,4 +3,5 @@
     <string name="search_title">Search series</string>
     <string name="search_hint">Search series by name</string>
     <string name="retry">Retry</string>
+    <string name="search_by_name">Search by name</string>
 </resources>

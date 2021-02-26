@@ -9,9 +9,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
-import com.github.myseries.MySeriesApplication
+import com.github.myseries.MyApplication
 import com.github.myseries.R
 import com.github.myseries.databinding.FragmentSeriesBinding
+import com.github.myseries.di.ComposableRoot
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
@@ -21,7 +22,7 @@ import kotlinx.coroutines.launch
 class SeriesFragment : Fragment() {
     private val scope = CoroutineScope(Dispatchers.Main.immediate)
 
-    private val factory: SeriesViewModelFactory by lazy { (requireActivity().application as MySeriesApplication).seriesContainer.seriesViewModelFactory }
+    private val factory: SeriesViewModelFactory by lazy { (requireActivity().application as ComposableRoot).appCompositionRoot.seriesViewModelFactory }
     private lateinit var viewModel: SeriesViewModel
 
     private lateinit var binding: FragmentSeriesBinding

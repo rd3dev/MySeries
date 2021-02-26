@@ -1,4 +1,4 @@
-package com.github.myseries.ui.series.search
+package com.github.myseries.ui.search
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,12 +9,15 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import com.github.myseries.MySeriesApplication
+import com.github.myseries.MyApplication
 import com.github.myseries.databinding.FragmentSearchBinding
+import com.github.myseries.di.ComposableRoot
 
 class SearchFragment : Fragment() {
     private lateinit var viewModel: SearchViewModel
-    private val factory: SearchViewModelFactory by lazy { (requireActivity().application as MySeriesApplication).seriesContainer.searchViewModelFactory }
+    private val factory: SearchViewModelFactory by lazy {
+        (requireActivity().application as ComposableRoot).appCompositionRoot.searchViewModelFactory
+    }
 
     private lateinit var binding: FragmentSearchBinding
     private val searchAdapter by lazy { SearchAdapter() }
@@ -34,12 +37,17 @@ class SearchFragment : Fragment() {
         binding.listSearchResult.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.listSearchResult.adapter = searchAdapter
 
-        binding.query.setOnEditorActionListener { v, actionId, event ->
+        binding.query.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 viewModel.searchSeriesByName(binding.query.text.toString())
-                true
+                binding.query.onEditorAction(EditorInfo.IME_ACTION_DONE)
             }
-            false
+            true
+        }
+
+        binding.search.setOnClickListener {
+            viewModel.searchSeriesByName(binding.query.text.toString())
+            binding.query.onEditorAction(EditorInfo.IME_ACTION_DONE)
         }
     }
 

@@ -4,16 +4,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.series.search.SearchFragment">
+    tools:context=".ui.search.SearchFragment">
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/query"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Search by name"
+        android:hint="@string/search_by_name"
         android:imeOptions="actionSearch"
         android:singleLine="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/search"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_search"
+        app:fabSize="mini"
+        app:layout_constraintTop_toTopOf="@id/search"
+        app:layout_constraintBottom_toBottomOf="@id/search"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="@string/search_by_name" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_search_result"
