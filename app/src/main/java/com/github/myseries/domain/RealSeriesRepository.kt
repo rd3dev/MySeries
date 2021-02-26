@@ -6,8 +6,10 @@ import androidx.paging.PagingData
 import com.github.myseries.data.ShowPagingSource
 import com.github.myseries.data.model.toSeries
 import com.github.myseries.data.remote.TVMazeService
+import com.github.myseries.domain.model.NetworkException
 import com.github.myseries.domain.model.Series
 import kotlinx.coroutines.flow.Flow
+import java.io.IOException
 
 class RealSeriesRepository(private val service: TVMazeService) : SeriesRepository {
     override fun getSeriesStream(): Flow<PagingData<Series>> {
@@ -21,8 +23,14 @@ class RealSeriesRepository(private val service: TVMazeService) : SeriesRepositor
     }
 
     override suspend fun getSeriesByName(name: String): List<Series> {
-        return service.getShowsByName(name).map {
-            it.show.toSeries()
+        return try {
+            service.getShowsByName(name).map {
+                it.show.toSeries()
+            }
+        } catch (exception: IOException) {
+            throw NetworkException.Connection
+        } catch (exception: retrofit2.HttpException) {
+            throw NetworkException.Server
         }
     }
 

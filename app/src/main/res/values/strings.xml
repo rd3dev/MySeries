@@ -4,4 +4,7 @@
     <string name="search_hint">Search series by name</string>
     <string name="retry">Retry</string>
     <string name="search_by_name">Search by name</string>
+    <string name="connection_error">Connection error. Check your internet connection.</string>
+    <string name="server_error">Server error. Try later.</string>
+    <string name="no_series_found">No series found</string>
 </resources>
