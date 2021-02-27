@@ -27,6 +27,6 @@ class SeriesViewHolder(private val binding: ItemSeriesBinding)  : RecyclerView.V
             .with(binding.root)
             .load(series.poster)
             .centerCrop()
-            .into(binding.poster);
+            .into(binding.poster)
     }
 }

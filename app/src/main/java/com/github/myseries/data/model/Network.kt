@@ -8,3 +8,4 @@ data class Network (
 	val name : String?,
 	val country : Country?
 )
+

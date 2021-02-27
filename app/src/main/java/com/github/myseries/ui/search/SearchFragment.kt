@@ -39,10 +39,10 @@ class SearchFragment : Fragment() {
         setupRecyclerView()
         setActionSearchListener()
         setSearchButtonListener()
+        setViewStateObserver()
     }
 
-    override fun onStart() {
-        super.onStart()
+    private fun setViewStateObserver() {
         viewModel.viewState.observe(viewLifecycleOwner) { viewState ->
             binding.progressBar.isVisible = viewState is SearchViewState.Loading
             binding.textError.isVisible = viewState is SearchViewState.LoadFailed
@@ -94,5 +94,5 @@ class SearchFragment : Fragment() {
         viewModel.searchSeriesByName(binding.query.text.toString())
         binding.query.onEditorAction(EditorInfo.IME_ACTION_DONE)
     }
-
 }
+

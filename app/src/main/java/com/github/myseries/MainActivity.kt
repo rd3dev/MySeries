@@ -1,7 +1,6 @@
 package com.github.myseries
 
 import android.os.Bundle
-import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {

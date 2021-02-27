@@ -8,6 +8,7 @@ import com.github.myseries.data.model.toSeries
 import com.github.myseries.data.remote.TVMazeService
 import com.github.myseries.domain.model.NetworkException
 import com.github.myseries.domain.model.Series
+import com.squareup.moshi.JsonDataException
 import kotlinx.coroutines.flow.Flow
 import java.io.IOException
 
@@ -30,6 +31,8 @@ class RealSeriesRepository(private val service: TVMazeService) : SeriesRepositor
         } catch (exception: IOException) {
             throw NetworkException.Connection
         } catch (exception: retrofit2.HttpException) {
+            throw NetworkException.Server
+        } catch (exception: JsonDataException) {
             throw NetworkException.Server
         }
     }

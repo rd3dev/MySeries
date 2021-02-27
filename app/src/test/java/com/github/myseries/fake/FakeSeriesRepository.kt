@@ -6,13 +6,17 @@ import com.github.myseries.domain.model.Series
 import kotlinx.coroutines.flow.Flow
 
 class FakeSeriesRepository : SeriesRepository {
+    var result: Any = Unit
+
     override fun getSeriesStream(): Flow<PagingData<Series>> {
         TODO("Not yet implemented")
     }
 
     override suspend fun getSeriesByName(name: String): List<Series> {
         return if (name.contains("girl")) {
-            listOf(Series("Chicken girls", "627433.jpg"))
+            listOf(Series("Chicken girls", "627433.jpg")).also {
+                result = it
+            }
         } else {
             when (result) {
                 is List<*> -> {
@@ -27,9 +31,5 @@ class FakeSeriesRepository : SeriesRepository {
             }
         }
 
-    }
-
-    companion object {
-        var result: Any = Unit
     }
 }

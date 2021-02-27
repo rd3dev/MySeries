@@ -9,7 +9,6 @@ import com.github.myseries.domain.model.Series
 import kotlinx.coroutines.launch
 
 class SearchViewModel(private val repository: SeriesRepository) : ViewModel() {
-
     val viewState = MutableLiveData<SearchViewState>()
 
     fun searchSeriesByName(it: String) {

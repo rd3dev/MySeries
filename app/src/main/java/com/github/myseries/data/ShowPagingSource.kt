@@ -2,10 +2,10 @@ package com.github.myseries.data
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.github.myseries.data.model.Show
 import com.github.myseries.data.model.toSeries
 import com.github.myseries.data.remote.TVMazeService
 import com.github.myseries.domain.model.Series
+import com.squareup.moshi.JsonDataException
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -17,7 +17,7 @@ class ShowPagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Series> {
         val page = params.key ?: TVMAZE_STARTING_PAGE_INDEX
         return try {
-            val series = service.listShowsByPage(page).map { it.toSeries() }
+            val series = service.getShowsByPage(page).map { it.toSeries() }
             val nextKey = if (series.isEmpty()) {
                 null
             } else {
@@ -33,10 +33,12 @@ class ShowPagingSource(
             return LoadResult.Error(exception)
         } catch (exception: HttpException) {
             return LoadResult.Error(exception)
+        } catch (exception: JsonDataException) {
+            return LoadResult.Error(exception)
         }
     }
 
     override fun getRefreshKey(state: PagingState<Int, Series>): Int? {
-        return 0 //TODO
+        return state.anchorPosition
     }
 }

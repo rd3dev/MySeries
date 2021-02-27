@@ -38,12 +38,45 @@ class SeriesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val adapter = setupSeriesAdapter()
+
+        viewModel = ViewModelProvider(this, factory)
+            .get(SeriesViewModel::class.java)
+
+        setSeriesObserver(adapter)
+        setHasOptionsMenu(true)
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        scope.cancel()
+    }
+
+    private fun setSeriesObserver(adapter: SeriesAdapter) {
+        scope.launch {
+            viewModel.getSeries().collectLatest {
+                adapter.submitData(it)
+            }
+        }
+    }
+
+    private fun setupSeriesAdapter(): SeriesAdapter {
         val adapter = SeriesAdapter()
 
         binding.retryButton.setOnClickListener { adapter.retry() }
-
         binding.listShows.layoutManager = GridLayoutManager(requireContext(), 2)
 
+        setLoadStateListener(adapter)
+
+        binding.listShows.adapter = adapter.withLoadStateHeaderAndFooter(
+            header = SeriesLoadStateAdapter { adapter.retry() },
+            footer = SeriesLoadStateAdapter { adapter.retry() }
+        )
+        return adapter
+    }
+
+    private fun setLoadStateListener(adapter: SeriesAdapter) {
         adapter.addLoadStateListener { loadState ->
 
             binding.listShows.isVisible = loadState.source.refresh is LoadState.NotLoading
@@ -55,29 +88,18 @@ class SeriesFragment : Fragment() {
                 ?: loadState.append as? LoadState.Error
                 ?: loadState.prepend as? LoadState.Error
             errorState?.let {
-                Toast.makeText(
-                    requireContext(),
-                    "Check your connection, please. ${it.error}",
-                    Toast.LENGTH_LONG
-                ).show()
+                showErrorMessage(it)
             }
 
-            setHasOptionsMenu(true)
         }
+    }
 
-        binding.listShows.adapter =  adapter.withLoadStateHeaderAndFooter(
-            header = SeriesLoadStateAdapter { adapter.retry() },
-            footer = SeriesLoadStateAdapter { adapter.retry() }
-        )
-
-        viewModel = ViewModelProvider(this, factory)
-            .get(SeriesViewModel::class.java)
-
-        scope.launch {
-            viewModel.getSeries().collectLatest {
-                adapter.submitData(it)
-            }
-        }
+    private fun showErrorMessage(it: LoadState.Error) {
+        Toast.makeText(
+            requireContext(),
+            "Check your connection, please. ${it.error}",
+            Toast.LENGTH_LONG
+        ).show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -92,11 +114,5 @@ class SeriesFragment : Fragment() {
             }
         }
         return true
-    }
-
-
-    override fun onDestroy() {
-        super.onDestroy()
-        scope.cancel()
     }
 }

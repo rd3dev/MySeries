@@ -7,7 +7,7 @@ import retrofit2.http.Query
 
 interface TVMazeService {
     @GET("shows")
-    suspend fun listShowsByPage(@Query("page")  page: Int): List<Show>
+    suspend fun getShowsByPage(@Query("page")  page: Int): List<Show>
 
     @GET("search/shows")
     suspend fun getShowsByName(@Query("q") query: String): List<SearchResponse>
